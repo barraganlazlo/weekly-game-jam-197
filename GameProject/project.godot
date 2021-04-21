@@ -9,12 +9,24 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://scripts/Player.gd"
+}, {
+"base": "RigidBody2D",
+"class": "PlayerLaunching",
+"language": "GDScript",
+"path": "res://scripts/PlayerLaunching.gd"
+}, {
 "base": "Node",
 "class": "StateMachine",
 "language": "GDScript",
 "path": "res://scripts/StateMachine.gd"
 } ]
 _global_script_class_icons={
+"Player": "",
+"PlayerLaunching": "",
 "StateMachine": ""
 }
 

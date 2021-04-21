@@ -1,29 +1,23 @@
 extends RigidBody2D
+class_name PlayerLaunching
 
-const UP = Vector2(0,-1)
+onready var player_strap_position :Vector2= $Body/StrapPosition.global_position
+onready var raycasts = $Body/Raycasts
+export(float) var force :float= 2
 
-#nodes
-onready var raycasts : Node2D = $Body/Raycasts
-onready var body : CollisionShape2D = $Body
-onready var sprite : Sprite = $Body/Sprite
+var touched_ground:=false
 
-#reglages
-export(NodePath) var Bag : NodePath
-export(float) var move_speed : float = 3
+func launch(bag_strap_position:Vector2) -> void:
+	var direction := to_local(bag_strap_position) - to_local(player_strap_position)
+	apply_impulse(player_strap_position,direction * force)
+	print("launch : ",direction, force,to_local(bag_strap_position),to_local(player_strap_position))
 
-#runtime
-var velocity :=Vector2(0,0)
-var is_grounded :=false
-var animation_frames : int 
+func _process(delta):
+	if(!touched_ground and _check_is_grounded()):
+		touched_ground=true
 
-func _ready():
-	animation_frames=sprite.hframes
-
-func _physics_process(delta:float) -> void :
-	var move_direction := -Input.get_action_strength("move_left") +Input.get_action_strength("move_right")
-	velocity.x=move_direction * move_speed * Globals.UNIT_SIZE
-	if move_direction >0:
-		body.scale.x=1
-	elif move_direction <0:
-		body.scale.x=-1
-	#add_central_force(velocity - veloc)
+func _check_is_grounded() -> bool :
+	for raycast in raycasts.get_children():
+		if raycast.is_colliding():
+			return true
+	return false

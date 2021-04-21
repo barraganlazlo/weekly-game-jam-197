@@ -1,15 +1,16 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/player/Player walk.png" type="Texture" id=2]
 [ext_resource path="res://sprites/player/Player Idle.png" type="Texture" id=3]
 [ext_resource path="res://sprites/player/Player jump.png" type="Texture" id=4]
+[ext_resource path="res://scripts/MoveStateMachine.gd" type="Script" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.5, 10.5 )
 
 [sub_resource type="Animation" id=2]
-resource_name = "falling"
+resource_name = "fall"
 length = 0.1
 loop = true
 tracks/0/type = "value"
@@ -91,61 +92,6 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=4]
 resource_name = "jump"
-length = 0.4
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 4 ]
-}
-tracks/3/type = "method"
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "jump"
-} ]
-}
-
-[sub_resource type="Animation" id=5]
-resource_name = "jumping"
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Body/Sprite:frame")
@@ -182,6 +128,59 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 4 ]
+}
+
+[sub_resource type="Animation" id=5]
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Body/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 1, 2 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Body/Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 4 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Body/Sprite:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 4 ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "jump"
+} ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -230,12 +229,13 @@ animation = "falling"
 animation = "idle"
 
 [sub_resource type="AnimationNodeAnimation" id=9]
-animation = "jumping"
+animation = "jump"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
-animation = "walk"
+animation = "prejump"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "walk"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=12]
 
@@ -247,19 +247,27 @@ animation = "walk"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 
-[sub_resource type="AnimationNodeStateMachine" id=17]
-states/falling/node = SubResource( 7 )
-states/falling/position = Vector2( 227, 123 )
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=19]
+states/fall/node = SubResource( 7 )
+states/fall/position = Vector2( 234, 156 )
 states/idle/node = SubResource( 8 )
 states/idle/position = Vector2( 69, 29 )
-states/jumping/node = SubResource( 9 )
-states/jumping/position = Vector2( 436, 100 )
-states/walk/node = SubResource( 10 )
+states/jump/node = SubResource( 9 )
+states/jump/position = Vector2( 458, 156 )
+states/prejump/node = SubResource( 10 )
+states/prejump/position = Vector2( 389, 29 )
+states/walk/node = SubResource( 11 )
 states/walk/position = Vector2( 69, 113 )
-transitions = [ "jumping", "idle", SubResource( 11 ), "idle", "falling", SubResource( 12 ), "idle", "walk", SubResource( 13 ), "walk", "idle", SubResource( 14 ), "falling", "idle", SubResource( 15 ), "idle", "jumping", SubResource( 16 ) ]
+transitions = [ "jump", "idle", SubResource( 12 ), "idle", "fall", SubResource( 13 ), "idle", "walk", SubResource( 14 ), "walk", "idle", SubResource( 15 ), "fall", "idle", SubResource( 16 ), "idle", "prejump", SubResource( 17 ), "prejump", "jump", SubResource( 18 ) ]
 start_node = "idle"
+graph_offset = Vector2( -143, -64 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=18]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=20]
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -275,7 +283,7 @@ position = Vector2( -0.5, -5.5 )
 z_index = 1
 texture = ExtResource( 3 )
 hframes = 9
-frame = 2
+frame = 7
 
 [node name="Raycasts" type="Node2D" parent="Body"]
 
@@ -295,15 +303,18 @@ enabled = true
 cast_to = Vector2( 0, 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/falling = SubResource( 2 )
+anims/fall = SubResource( 2 )
 anims/idle = SubResource( 3 )
 anims/jump = SubResource( 4 )
-anims/jumping = SubResource( 5 )
+anims/prejump = SubResource( 5 )
 anims/walk = SubResource( 6 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 17 )
+tree_root = SubResource( 19 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 root_motion_track = NodePath(".")
-parameters/playback = SubResource( 18 )
+parameters/playback = SubResource( 20 )
+
+[node name="MoveStateMachine" type="Node" parent="."]
+script = ExtResource( 5 )
