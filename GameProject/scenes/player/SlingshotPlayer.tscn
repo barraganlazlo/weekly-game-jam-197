@@ -1,321 +1,119 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://sprites/player/Player walk.png" type="Texture" id=2]
-[ext_resource path="res://sprites/player/Player Idle.png" type="Texture" id=3]
-[ext_resource path="res://sprites/player/Player jump.png" type="Texture" id=4]
-[ext_resource path="res://scripts/MoveStateMachine.gd" type="Script" id=5]
+[ext_resource path="res://scripts/player/SlingshotPlayer.gd" type="Script" id=1]
+[ext_resource path="res://scripts/statemachines/MoveStateMachine.gd" type="Script" id=2]
+[ext_resource path="res://sprites/player/Player_throwself.png" type="Texture" id=3]
+[ext_resource path="res://sounds/joueur_atterissage.wav" type="AudioStream" id=4]
+[ext_resource path="res://sounds/joueur_saut_3.wav" type="AudioStream" id=5]
+[ext_resource path="res://scripts/PlayerAndBag.gd" type="Script" id=6]
+[ext_resource path="res://sprites/bag/Bag mecanism.png" type="Texture" id=7]
+[ext_resource path="res://scripts/Strap.gd" type="Script" id=8]
+[ext_resource path="res://scripts/bag/BagSlingshot.gd" type="Script" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8.5, 10.5 )
+extents = Vector2( 4.87652, 7.86581 )
 
 [sub_resource type="Animation" id=2]
-resource_name = "fall"
-length = 0.1
-loop = true
+resource_name = "mounting"
+length = 1.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
+tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 3 ]
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
+tracks/1/path = NodePath("Sprite/strap:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 4 ]
-}
-
-[sub_resource type="Animation" id=3]
-length = 0.9
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 3 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 9 ]
-}
-
-[sub_resource type="Animation" id=4]
-resource_name = "jump"
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 3 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 4 ]
-}
-
-[sub_resource type="Animation" id=5]
-length = 0.2
-tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
+"times": PoolRealArray( 0, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 1, 2 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 4 ]
-}
-tracks/3/type = "method"
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0.2 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "jump"
-} ]
+"update": 0,
+"values": [ Vector2( -5.193, 0 ), Vector2( -5.665, -10 ) ]
 }
 
-[sub_resource type="Animation" id=6]
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("Body/Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Body/Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ ExtResource( 2 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Body/Sprite:hframes")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 10 ]
-}
+[node name="PlayerAndBag" type="Node2D"]
+script = ExtResource( 6 )
+player_path = NodePath("SlingshotPlayer")
+bag_path = NodePath("BagSlingshot")
 
-[sub_resource type="AnimationNodeAnimation" id=7]
-animation = "falling"
-
-[sub_resource type="AnimationNodeAnimation" id=8]
-animation = "idle"
-
-[sub_resource type="AnimationNodeAnimation" id=9]
-animation = "jump"
-
-[sub_resource type="AnimationNodeAnimation" id=10]
-animation = "prejump"
-
-[sub_resource type="AnimationNodeAnimation" id=11]
-animation = "walk"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=12]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=14]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=15]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=16]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=17]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=18]
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id=19]
-states/fall/node = SubResource( 7 )
-states/fall/position = Vector2( 234, 156 )
-states/idle/node = SubResource( 8 )
-states/idle/position = Vector2( 69, 29 )
-states/jump/node = SubResource( 9 )
-states/jump/position = Vector2( 458, 156 )
-states/prejump/node = SubResource( 10 )
-states/prejump/position = Vector2( 389, 29 )
-states/walk/node = SubResource( 11 )
-states/walk/position = Vector2( 69, 113 )
-transitions = [ "jump", "idle", SubResource( 12 ), "idle", "fall", SubResource( 13 ), "idle", "walk", SubResource( 14 ), "walk", "idle", SubResource( 15 ), "fall", "idle", SubResource( 16 ), "idle", "prejump", SubResource( 17 ), "prejump", "jump", SubResource( 18 ) ]
-start_node = "idle"
-graph_offset = Vector2( -143, -64 )
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id=20]
-
-[node name="Player" type="KinematicBody2D"]
+[node name="SlingshotPlayer" type="KinematicBody2D" parent="."]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource( 1 )
-move_speed = 3.0
-max_jump_height = 1.1
-min_jump_height = 0.3
+max_jump_height = 2.3
+min_jump_height = 1.5
+jump_duration = 0.3
+max_distance = 150.0
 
-[node name="Body" type="CollisionShape2D" parent="."]
+[node name="Body" type="CollisionShape2D" parent="SlingshotPlayer"]
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="Body"]
-position = Vector2( -0.5, -5.5 )
+[node name="Sprite" type="Sprite" parent="SlingshotPlayer/Body"]
+position = Vector2( -4.00791, -8.61815 )
 z_index = 1
 texture = ExtResource( 3 )
-hframes = 9
-frame = 5
+hframes = 5
 
-[node name="Raycasts" type="Node2D" parent="Body"]
+[node name="Raycasts" type="Node2D" parent="SlingshotPlayer/Body"]
 
-[node name="RayCast2D" type="RayCast2D" parent="Body/Raycasts"]
-position = Vector2( -8.5, 10 )
+[node name="RayCast2D" type="RayCast2D" parent="SlingshotPlayer/Body/Raycasts"]
+position = Vector2( -5, 6.5 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="RayCast2D2" type="RayCast2D" parent="Body/Raycasts"]
-position = Vector2( 8.5, 10 )
+[node name="RayCast2D2" type="RayCast2D" parent="SlingshotPlayer/Body/Raycasts"]
+position = Vector2( 5, 6.5 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="RayCast2D3" type="RayCast2D" parent="Body/Raycasts"]
-position = Vector2( 0, 10 )
+[node name="RayCast2D3" type="RayCast2D" parent="SlingshotPlayer/Body/Raycasts"]
+position = Vector2( 0, 6.5 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/fall = SubResource( 2 )
-anims/idle = SubResource( 3 )
-anims/jump = SubResource( 4 )
-anims/prejump = SubResource( 5 )
-anims/walk = SubResource( 6 )
+[node name="LandingAudioStream" type="AudioStreamPlayer2D" parent="SlingshotPlayer/Body"]
+stream = ExtResource( 4 )
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 19 )
-anim_player = NodePath("../AnimationPlayer")
-active = true
-root_motion_track = NodePath(".")
-parameters/playback = SubResource( 20 )
+[node name="JumpAudioStream" type="AudioStreamPlayer2D" parent="SlingshotPlayer/Body"]
+stream = ExtResource( 5 )
 
-[node name="MoveStateMachine" type="Node" parent="."]
-script = ExtResource( 5 )
+[node name="strap" type="Node2D" parent="SlingshotPlayer/Body"]
+position = Vector2( -3.5, -2 )
+
+[node name="MoveStateMachine" type="Node" parent="SlingshotPlayer"]
+script = ExtResource( 2 )
+
+[node name="BagSlingshot" type="Node2D" parent="."]
+script = ExtResource( 9 )
+
+[node name="Sprite" type="Sprite" parent="BagSlingshot"]
+position = Vector2( 2, -5 )
+texture = ExtResource( 7 )
+hframes = 13
+frame = 6
+
+[node name="strap" type="Node2D" parent="BagSlingshot/Sprite"]
+position = Vector2( -5.429, -5.5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BagSlingshot"]
+autoplay = "mounting"
+anims/mounting = SubResource( 2 )
+
+[node name="Line2D" type="Line2D" parent="."]
+z_index = -1
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 3.0
+default_color = Color( 0.490196, 0.219608, 0.2, 1 )
+script = ExtResource( 8 )
+bag_strap_path = NodePath("../BagSlingshot/Sprite/strap")
+player_strap_path = NodePath("../SlingshotPlayer/Body/strap")

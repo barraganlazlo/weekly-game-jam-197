@@ -1,10 +1,13 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=29 format=2]
 
-[ext_resource path="res://scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://scripts/player/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/player/Player walk.png" type="Texture" id=2]
 [ext_resource path="res://sprites/player/Player Idle.png" type="Texture" id=3]
 [ext_resource path="res://sprites/player/Player jump.png" type="Texture" id=4]
-[ext_resource path="res://scripts/MoveStateMachine.gd" type="Script" id=5]
+[ext_resource path="res://scripts/statemachines/MoveStateMachine.gd" type="Script" id=5]
+[ext_resource path="res://sounds/joueur_atterissage.wav" type="AudioStream" id=6]
+[ext_resource path="res://sounds/joueur_saut_3.wav" type="AudioStream" id=7]
+[ext_resource path="res://scripts/PlayerAndBag.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.5, 10.5 )
@@ -269,52 +272,66 @@ graph_offset = Vector2( -143, -64 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=20]
 
-[node name="Player" type="KinematicBody2D"]
-collision_layer = 2
-script = ExtResource( 1 )
-max_jump_height = 1.8
-min_jump_height = 1.1
+[node name="PlayerAndBag" type="Node2D"]
+script = ExtResource( 8 )
+player_path = NodePath("DefaultPlayer")
+bag_path = NodePath("DefaultPlayer")
 
-[node name="Body" type="CollisionShape2D" parent="."]
+[node name="DefaultPlayer" type="KinematicBody2D" parent="."]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource( 1 )
+max_jump_height = 2.3
+min_jump_height = 1.5
+jump_duration = 0.3
+
+[node name="Body" type="CollisionShape2D" parent="DefaultPlayer"]
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Sprite" parent="Body"]
+[node name="Sprite" type="Sprite" parent="DefaultPlayer/Body"]
 position = Vector2( -0.5, -5.5 )
 z_index = 1
 texture = ExtResource( 3 )
 hframes = 9
-frame = 7
+frame = 1
 
-[node name="Raycasts" type="Node2D" parent="Body"]
+[node name="Raycasts" type="Node2D" parent="DefaultPlayer/Body"]
 
-[node name="RayCast2D" type="RayCast2D" parent="Body/Raycasts"]
+[node name="RayCast2D" type="RayCast2D" parent="DefaultPlayer/Body/Raycasts"]
 position = Vector2( -8.5, 10 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="RayCast2D2" type="RayCast2D" parent="Body/Raycasts"]
+[node name="RayCast2D2" type="RayCast2D" parent="DefaultPlayer/Body/Raycasts"]
 position = Vector2( 8.5, 10 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="RayCast2D3" type="RayCast2D" parent="Body/Raycasts"]
+[node name="RayCast2D3" type="RayCast2D" parent="DefaultPlayer/Body/Raycasts"]
 position = Vector2( 0, 10 )
 enabled = true
 cast_to = Vector2( 0, 3 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="LandingAudioStream" type="AudioStreamPlayer2D" parent="DefaultPlayer/Body"]
+position = Vector2( 0, 10 )
+stream = ExtResource( 6 )
+
+[node name="JumpAudioStream" type="AudioStreamPlayer2D" parent="DefaultPlayer/Body"]
+stream = ExtResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DefaultPlayer"]
 anims/fall = SubResource( 2 )
 anims/idle = SubResource( 3 )
 anims/jump = SubResource( 4 )
 anims/prejump = SubResource( 5 )
 anims/walk = SubResource( 6 )
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="DefaultPlayer"]
 tree_root = SubResource( 19 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 root_motion_track = NodePath(".")
 parameters/playback = SubResource( 20 )
 
-[node name="MoveStateMachine" type="Node" parent="."]
+[node name="MoveStateMachine" type="Node" parent="DefaultPlayer"]
 script = ExtResource( 5 )

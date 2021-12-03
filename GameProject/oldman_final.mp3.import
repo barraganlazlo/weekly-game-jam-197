@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/oldman_final.mp3-00b4030b635d108c196a62a30f1589da.mp3str"
+
+[deps]
+
+source_file="res://oldman_final.mp3"
+dest_files=[ "res://.import/oldman_final.mp3-00b4030b635d108c196a62a30f1589da.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
